@@ -5,13 +5,12 @@ require("dotenv").config();
 
 const app = express().use(body_parser.json());
 
-const token = process.env.TOKEN;
-const mytoken = process.env.MYTOKEN;
+const mytoken = process.env.WEBHOOK_VERIFY_TOKEN;
+const token = process.env.WHATSAPP_TOKEN;
 
 app.listen(8000 || process.env.PORT, () => {
   console.log("Webhook Is Listening");
 });
-
 
 // untuk verifikasi callback url dari sisi dashboard - cloup api side
 app.get("/webhook", (req, res) => {
