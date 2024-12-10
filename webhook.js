@@ -1,6 +1,8 @@
 const express = require("express");
 const body_parser = require("body-parser");
 const axios = require("axios");
+const fs = require("fs"); // untuk membaca file sertifikat
+const https = require("https"); // Modul HTTPS
 require("dotenv").config();
 
 const app = express().use(body_parser.json());
@@ -8,12 +10,21 @@ const app = express().use(body_parser.json());
 const mytoken = process.env.WEBHOOK_VERIFY_TOKEN;
 const token = process.env.WHATSAPP_TOKEN;
 
+const options = {
+  key: fs.readFileSync("server.key"),
+  cert: fs.readFileSync("server.crt"),
+};
+
+const server = https.createServer(options, app);
+
 app.listen(8000 || process.env.PORT, () => {
   console.log("Webhook Is Listening");
 });
 
 // untuk verifikasi callback url dari sisi dashboard - cloup api side
 app.get("/webhook", (req, res) => {
+  res.send("Ini adalah endpoint GET untuk webhook");
+
   let mode = req.query["hub.mode"];
   let challenge = req.query["hub.challenge"];
   let token = req.query["hub.verify_token"];
@@ -69,5 +80,7 @@ app.post("/webhook", (req, res) => {
     } else {
       res.sendStatus(404); // Not found
     }
+  } else {
+    res.sendStatus(400); //Bad Request
   }
 });
