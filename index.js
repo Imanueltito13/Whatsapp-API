@@ -96,6 +96,6 @@ async function uploadImage() {
   console.log(response.data);
 }
 
-// sendTemplateMessage();
+sendTemplateMessage();
 // uploadImage();
-sendImageMessage();
+// sendImageMessage();
