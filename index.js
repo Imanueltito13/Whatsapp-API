@@ -5,7 +5,7 @@ const fs = require("fs");
 
 async function sendTemplateMessage() {
   const response = await axios({
-    url: "https://graph.facebook.com/v21.0/382607701608638/messages",
+    url: `https://graph.facebook.com/${process.env.API_VERSION}/${process.env.BUSINESS_PHONE_NUMBER_ID}/messages`,
     method: "POST",
     headers: {
       Authorization: " Bearer " + process.env.WHATSAPP_TOKEN,
@@ -14,7 +14,7 @@ async function sendTemplateMessage() {
 
     data: JSON.stringify({
       messaging_product: "whatsapp",
-      to: "6285852821544",
+      to: process.env.RECIPIENT_NUMBER,
       type: "template",
       template: {
         name: "reborn",
@@ -39,7 +39,7 @@ async function sendTextMessage() {
 
     data: JSON.stringify({
       messaging_product: "whatsapp",
-      to: "6285852821544",
+      to: RECIPIENT_NUMBER,
       type: "text",
       text: {
         body: "apakah ingin upgrade ke premium plan kak?",
@@ -61,7 +61,7 @@ async function sendImageMessage() {
 
     data: JSON.stringify({
       messaging_product: "whatsapp",
-      to: "6285852821544",
+      to: RECIPIENT_NUMBER,
       type: "image",
       image: {
         // link: "https://dummyimage.com/600x400/000/fff&text=halo,+imanuel+tito!",
