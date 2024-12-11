@@ -11,8 +11,8 @@ const mytoken = process.env.WEBHOOK_VERIFY_TOKEN;
 const token = process.env.WHATSAPP_TOKEN;
 
 const options = {
-  key: fs.readFileSync("server.key"),
-  cert: fs.readFileSync("server.crt"),
+  key: fs.readFileSync("../server.key"),
+  cert: fs.readFileSync("../server.crt"),
 };
 
 const server = https.createServer(options, app);
