@@ -1,20 +1,25 @@
 const express = require("express");
-const axios = require("axios"); // Import axios di sini
+const axios = require("axios");
 const app = express();
 const cors = require("cors");
-
-require("dotenv").config(); // Pastikan Anda memiliki file .env dengan variabel-variabel yang diperlukan
+require("dotenv").config();
 
 app.use(cors());
-app.use(express.json()); // Middleware untuk membaca JSON body
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Like and Subscribe");
 });
 
 app.post("/", async (req, res) => {
+  const { template } = req.body;
+
+  if (!template) {
+    return res.status(400).json({ error: "Template is required" });
+  }
+
   try {
-    const response = await sendMessage();
+    const response = await sendMessage(template);
     res
       .status(200)
       .json({ message: "Message sent successfully", data: response.data });
@@ -24,7 +29,7 @@ app.post("/", async (req, res) => {
   }
 });
 
-async function sendMessage() {
+async function sendMessage(template) {
   const response = await axios({
     url: `https://graph.facebook.com/${process.env.API_VERSION}/${process.env.BUSINESS_PHONE_NUMBER_ID}/messages`,
     method: "POST",
@@ -37,9 +42,9 @@ async function sendMessage() {
       to: process.env.RECIPIENT_NUMBER,
       type: "template",
       template: {
-        name: "reborn",
+        name: template.name,
         language: {
-          code: "en_US",
+          code: template.language || "en_US",
         },
       },
     }),
