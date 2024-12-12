@@ -1,30 +1,4 @@
-import axios from "axios";
-import "./App.css";
-import { useState } from "react";
-import { useEffect } from "react";
-
-export default function App() {
-  const sendMessage = () => {
-    axios
-      .post("http://localhost:8080")
-      .then((response) => {
-        console.log("Message Sent Succesfuly", response.data);
-      })
-      .catch((error) => {
-        console.error("error nih", error);
-      });
-  };
-  return (
-    <div className="App">
-      <button className="bg-blue-500" onClick={sendMessage}>
-        Kirim Pesan WA
-      </button>
-      <Template />
-    </div>
-  );
-}
-
-const Template = () => {
+function Template() {
   const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -68,6 +42,13 @@ const Template = () => {
     );
   }
   return (
+    // <div className="App">
+    //   <button className="bg-blue-500" onClick={sendMessage}>
+    //     Kirim Pesan WA
+    //   </button>
+
+    // </div>
+
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold text-center mb-6">
         Template Pesan Facebook
@@ -103,4 +84,6 @@ const Template = () => {
       </div>
     </div>
   );
-};
+}
+
+export default Template;
