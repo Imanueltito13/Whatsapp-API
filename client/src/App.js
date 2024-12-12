@@ -33,7 +33,7 @@ export default function App() {
         selectedTemplate={selectedTemplate}
       />
       <button
-        className="bg-blue-500 px-5 py-2 mx-24 rounded-md text-white font-normal hover:bg-blue-700 transform transition duration-500 ease-in-out hover:-translate-y-2"
+        className="bg-blue-500 px-5 py-2 mx-24 rounded-md text-white font-normal hover:bg-blue-700 transform transition duration-500 ease-in-out "
         onClick={sendMessage}
       >
         Kirim Pesan WA
