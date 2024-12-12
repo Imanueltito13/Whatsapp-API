@@ -3,8 +3,10 @@ import axios from "axios";
 import "./App.css";
 import { useState, useEffect } from "react";
 
+const token =
+  "EAAHSEn4v16IBO2zYZCkF0jPUkbuh9ZABwEKlPVS4PXZCCEiwgqmpJPr1IGP0ZCuzM1oogfsg5CyagGdUZBjk2lLZAaH5zAoYhfSytkzmmCbARbqGoqi8CZC0l6y25GbviXOJ9fpzZCQVdGBn1RwQH2uR4swXGMDAZC8Vd6bRHh9nVOQ4Sm0Xl5NAdZBDUsxTzuKgMZAXwZDZD";
 export default function App() {
-  const [selectedTemplate, setSelectedTemplate] = useState(333098329898197);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
 
   const sendMessage = () => {
     if (!selectedTemplate) {
@@ -49,7 +51,7 @@ const Template = ({ onSelectTemplate, selectedTemplate }) => {
     const fetchTemplates = async () => {
       try {
         const response = await fetch(
-          "https://graph.facebook.com/v21.0/333098329898197/message_templates?access_token=EAAHSEn4v16IBO83ZAVNZAlLlPqrmaNyOxzypFT1QN8B0y5Jx7yPuaeFA8vgQZCetU6UiTvwQKnt31ZBOiHHYJYJCLwYR87UJpLqOpNW5INom5IyJp17KB5ZApuVwU2wRUuWDCKsAENijoCXFegFjQcMQyJvkJXSRrx6cK0nrtfPZBJcjfsh1EJ3Q5moLRnWnLB7Trmzs3p8xLwZC6P5im8xIKqMIBgZD"
+          `https://graph.facebook.com/v21.0/333098329898197/message_templates?access_token=${token}`
           // `https://graph.facebook.com/${process.env.API_VERSION}/${process.env.BUSINESS_PHONE_NUMBER_ID}/message_templates?access_token=EAAHSEn4v16IBO83ZAVNZAlLlPqrmaNyOxzypFT1QN8B0y5Jx7yPuaeFA8vgQZCetU6UiTvwQKnt31ZBOiHHYJYJCLwYR87UJpLqOpNW5INom5IyJp17KB5ZApuVwU2wRUuWDCKsAENijoCXFegFjQcMQyJvkJXSRrx6cK0nrtfPZBJcjfsh1EJ3Q5moLRnWnLB7Trmzs3p8xLwZC6P5im8xIKqMIBgZD`
         );
 
