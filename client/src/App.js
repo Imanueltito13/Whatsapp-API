@@ -1,7 +1,6 @@
 import axios from "axios";
 import "./App.css";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function App() {
   const sendMessage = () => {
@@ -29,6 +28,7 @@ export default function App() {
 
 const Template = () => {
   const [templates, setTemplates] = useState([]);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -36,7 +36,7 @@ const Template = () => {
     const fetchTemplates = async () => {
       try {
         const response = await fetch(
-          "https://graph.facebook.com/v21.0/333098329898197/message_templates?access_token=EAAHSEn4v16IBOZBlssq5fCeM0l8NmzdFmvnsQ3WPpfQZANPAjrfnrDBurodtdLUbG1pjxtVsqpvv4zgZBRND4GX1Y1aOAP2rEnwO41igy9ErouFtjq8Ev2JncYAcphs7OZBnDF308JiGZBwgGBSZBYZAasvh28Fw0Se3iKkoOIEtyK3f5xgKYuzmCwvGZBnCi9LsBKJHv0UioxGyistmXIoZBu4hKk1aZB"
+          "https://graph.facebook.com/v21.0/333098329898197/message_templates?access_token=EAAHSEn4v16IBO4VNrwlZAUHQw7Rb3iLuq3PwZBdQ1Hkfkbx4X0gKwo3IonsfgthlAbNOvFdmPLKVW8Kfo3nHRoGXEJ7PmBdMPU0RYn5lZCfHzyEYVFcQY7fBbP3f36U0PpDUzSrC95LsVkIoUpXohPv3LGzpn6SuaH3XIxq7YxZB6cSfYPYE8RJRoFhkr1ikU1cBCIDAGZAfCXdOkvkBsQ9xwSx8ZD"
         );
 
         if (!response.ok) {
