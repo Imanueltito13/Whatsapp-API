@@ -16,10 +16,13 @@ export default function App() {
   };
   return (
     <div className="App">
-      <button className="bg-blue-500" onClick={sendMessage}>
+      <Template />
+      <button
+        className="bg-blue-500 px-5 py-2 mx-24 rounded-md text-white font-normal hover:bg-blue-700 transform transition duration-500 ease-in-out hover:-translate-y-2"
+        onClick={sendMessage}
+      >
         Kirim Pesan WA
       </button>
-      <Template />
     </div>
   );
 }
@@ -72,11 +75,11 @@ const Template = () => {
       <h1 className="text-3xl font-bold text-center mb-6">
         Template Pesan Facebook
       </h1>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-4 gap-4 ">
         {templates.map((template, index) => (
           <div
             key={template.id}
-            className="bg-white border rounded-lg shadow-md p-4 hover:shadow-xl transition-shadow duration-300"
+            className="cursor-pointer bg-white border rounded-lg shadow-md p-4 hover:shadow-xl transition-shadow duration-300"
           >
             <h2 className="text-xl font-semibold mb-2 truncate">
               {template.name || `Template ${index + 1}`}
