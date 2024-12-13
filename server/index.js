@@ -11,6 +11,14 @@ app.get("/", (req, res) => {
   res.send("Like and Subscribe");
 });
 
+// Array of recipient numbers
+const recipientNumbers = [
+  "6285156981282",
+  "6285852821544",
+  "628883064052",
+  "6281233933175",
+];
+
 app.post("/", async (req, res) => {
   const { template } = req.body;
 
@@ -19,17 +27,21 @@ app.post("/", async (req, res) => {
   }
 
   try {
-    const response = await sendMessage(template);
-    res
-      .status(200)
-      .json({ message: "Message sent successfully", data: response.data });
+    // Send message to each recipient
+    const responses = await Promise.all(
+      recipientNumbers.map((number) => sendMessage(template, number))
+    );
+    res.status(200).json({
+      message: "Messages sent successfully to all recipients",
+      data: responses.map((response) => response.data),
+    });
   } catch (error) {
-    console.error("Error sending message:", error);
-    res.status(500).json({ error: "Failed to send message" });
+    console.error("Error sending messages:", error);
+    res.status(500).json({ error: "Failed to send messages" });
   }
 });
 
-async function sendMessage(template) {
+async function sendMessage(template, to) {
   const response = await axios({
     url: `https://graph.facebook.com/${process.env.API_VERSION}/${process.env.BUSINESS_PHONE_NUMBER_ID}/messages`,
     method: "POST",
@@ -39,7 +51,7 @@ async function sendMessage(template) {
     },
     data: JSON.stringify({
       messaging_product: "whatsapp",
-      to: process.env.RECIPIENT_NUMBER,
+      to: to, // Use the recipient number from the array
       type: "template",
       template: {
         name: template.name,
@@ -49,7 +61,6 @@ async function sendMessage(template) {
       },
     }),
   });
-
   return response;
 }
 
