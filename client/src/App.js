@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import "./App.css";
 import { useState, useEffect } from "react";
 
@@ -7,6 +6,7 @@ const token =
   "EAAHSEn4v16IBO2zYZCkF0jPUkbuh9ZABwEKlPVS4PXZCCEiwgqmpJPr1IGP0ZCuzM1oogfsg5CyagGdUZBjk2lLZAaH5zAoYhfSytkzmmCbARbqGoqi8CZC0l6y25GbviXOJ9fpzZCQVdGBn1RwQH2uR4swXGMDAZC8Vd6bRHh9nVOQ4Sm0Xl5NAdZBDUsxTzuKgMZAXwZDZD";
 export default function App() {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [phoneNumbers, setPhoneNumbers] = useState("");
 
   const sendMessage = () => {
     if (!selectedTemplate) {
@@ -14,8 +14,19 @@ export default function App() {
       return;
     }
 
+    if (!phoneNumbers) {
+      alert("Silakan masukkan nomor telepon!");
+      return;
+    }
+
+    // Split the input by commas and trim any extra spaces
+    const numbersArray = phoneNumbers.split(",").map((number) => number.trim());
+
     axios
-      .post("http://localhost:8080", { template: selectedTemplate })
+      .post("http://localhost:8080", {
+        template: selectedTemplate,
+        phoneNumbers: numbersArray,
+      })
       .then((response) => {
         console.log("Message Sent Successfully", response.data);
         alert("Pesan berhasil dikirim!");
@@ -32,8 +43,17 @@ export default function App() {
         onSelectTemplate={setSelectedTemplate}
         selectedTemplate={selectedTemplate}
       />
+      <div className="mt-4 px-24">
+        <input
+          type="text"
+          placeholder="Masukkan nomor telepon (pisahkan dengan koma)"
+          value={phoneNumbers}
+          onChange={(e) => setPhoneNumbers(e.target.value)}
+          className="border p-2 rounded-md w-80 text-xs"
+        />
+      </div>
       <button
-        className="bg-blue-500 px-5 py-2 mx-24 rounded-md text-white font-normal hover:bg-blue-700 transform transition duration-500 ease-in-out "
+        className="bg-blue-500 px-5 py-2 mx-24 rounded-md text-white font-normal hover:bg-blue-700 transform transition duration-500 ease-in-out mt-4 text-xs"
         onClick={sendMessage}
       >
         Kirim Pesan WA
@@ -52,7 +72,6 @@ const Template = ({ onSelectTemplate, selectedTemplate }) => {
       try {
         const response = await fetch(
           `https://graph.facebook.com/v21.0/523107387551459/message_templates?access_token=${token}`
-          // `https://graph.facebook.com/${process.env.API_VERSION}/${process.env.BUSINESS_PHONE_NUMBER_ID}/message_templates?access_token=EAAHSEn4v16IBO83ZAVNZAlLlPqrmaNyOxzypFT1QN8B0y5Jx7yPuaeFA8vgQZCetU6UiTvwQKnt31ZBOiHHYJYJCLwYR87UJpLqOpNW5INom5IyJp17KB5ZApuVwU2wRUuWDCKsAENijoCXFegFjQcMQyJvkJXSRrx6cK0nrtfPZBJcjfsh1EJ3Q5moLRnWnLB7Trmzs3p8xLwZC6P5im8xIKqMIBgZD`
         );
 
         if (!response.ok) {

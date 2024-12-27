@@ -11,20 +11,19 @@ app.get("/", (req, res) => {
   res.send("Like and Subscribe");
 });
 
-// Array of recipient numbers
-const recipientNumbers = ["6285852821544", "6285156981282"];
-
 app.post("/", async (req, res) => {
-  const { template } = req.body;
+  const { template, phoneNumbers } = req.body;
 
-  if (!template) {
-    return res.status(400).json({ error: "Template is required" });
+  if (!template || !phoneNumbers || !Array.isArray(phoneNumbers)) {
+    return res
+      .status(400)
+      .json({ error: "Template and phone numbers are required" });
   }
 
   try {
-    // Send message to each recipient
+    // Send message to each phone number
     const responses = await Promise.all(
-      recipientNumbers.map((number) => sendMessage(template, number))
+      phoneNumbers.map((number) => sendMessage(template, number))
     );
     res.status(200).json({
       message: "Messages sent successfully to all recipients",
