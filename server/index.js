@@ -12,12 +12,7 @@ app.get("/", (req, res) => {
 });
 
 // Array of recipient numbers
-const recipientNumbers = [
-  "6285156981282",
-  "6285852821544",
-  "628883064052",
-  "6281233933175",
-];
+const recipientNumbers = ["6285852821544"];
 
 app.post("/", async (req, res) => {
   const { template } = req.body;
