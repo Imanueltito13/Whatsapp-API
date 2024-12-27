@@ -51,7 +51,7 @@ const Template = ({ onSelectTemplate, selectedTemplate }) => {
     const fetchTemplates = async () => {
       try {
         const response = await fetch(
-          `https://graph.facebook.com/v21.0/333098329898197/message_templates?access_token=${token}`
+          `https://graph.facebook.com/v21.0/523107387551459/message_templates?access_token=${token}`
           // `https://graph.facebook.com/${process.env.API_VERSION}/${process.env.BUSINESS_PHONE_NUMBER_ID}/message_templates?access_token=EAAHSEn4v16IBO83ZAVNZAlLlPqrmaNyOxzypFT1QN8B0y5Jx7yPuaeFA8vgQZCetU6UiTvwQKnt31ZBOiHHYJYJCLwYR87UJpLqOpNW5INom5IyJp17KB5ZApuVwU2wRUuWDCKsAENijoCXFegFjQcMQyJvkJXSRrx6cK0nrtfPZBJcjfsh1EJ3Q5moLRnWnLB7Trmzs3p8xLwZC6P5im8xIKqMIBgZD`
         );
 

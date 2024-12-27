@@ -37,26 +37,34 @@ app.post("/", async (req, res) => {
 });
 
 async function sendMessage(template, to) {
-  const response = await axios({
-    url: `https://graph.facebook.com/${process.env.API_VERSION}/${process.env.BUSINESS_PHONE_NUMBER_ID}/messages`,
-    method: "POST",
-    headers: {
-      Authorization: "Bearer " + process.env.WHATSAPP_TOKEN,
-      "Content-Type": "application/json",
-    },
-    data: JSON.stringify({
-      messaging_product: "whatsapp",
-      to: to, // Use the recipient number from the array
-      type: "template",
-      template: {
-        name: template.name,
-        language: {
-          code: template.language || "en_US",
-        },
+  try {
+    const response = await axios({
+      url: `https://graph.facebook.com/${process.env.API_VERSION}/${process.env.BUSINESS_PHONE_NUMBER_ID}/messages`,
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + process.env.WHATSAPP_TOKEN,
+        "Content-Type": "application/json",
       },
-    }),
-  });
-  return response;
+      data: JSON.stringify({
+        messaging_product: "whatsapp",
+        to: to,
+        type: "template",
+        template: {
+          name: template.name,
+          language: {
+            code: template.language || "en_US",
+          },
+        },
+      }),
+    });
+    return response;
+  } catch (error) {
+    console.error(
+      "Error sending message:",
+      error.response ? error.response.data : error.message
+    );
+    throw error;
+  }
 }
 
 app.listen(8080, () => {
