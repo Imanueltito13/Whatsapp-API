@@ -4,9 +4,22 @@ import { useState, useEffect } from "react";
 
 const token =
   "EAAHSEn4v16IBO2zYZCkF0jPUkbuh9ZABwEKlPVS4PXZCCEiwgqmpJPr1IGP0ZCuzM1oogfsg5CyagGdUZBjk2lLZAaH5zAoYhfSytkzmmCbARbqGoqi8CZC0l6y25GbviXOJ9fpzZCQVdGBn1RwQH2uR4swXGMDAZC8Vd6bRHh9nVOQ4Sm0Xl5NAdZBDUsxTzuKgMZAXwZDZD";
+
 export default function App() {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [phoneNumbers, setPhoneNumbers] = useState("");
+  const [contacts, setContacts] = useState([]);
+  const [selectedContacts, setSelectedContacts] = useState([]);
+  const [newContact, setNewContact] = useState({ name: "", phone: "" });
+
+  const addContact = () => {
+    if (newContact.name && newContact.phone) {
+      setContacts([...contacts, newContact]);
+      setNewContact({ name: "", phone: "" });
+    } else {
+      alert("Silakan masukkan nama dan nomor telepon!");
+    }
+  };
 
   const sendMessage = () => {
     if (!selectedTemplate) {
@@ -14,13 +27,12 @@ export default function App() {
       return;
     }
 
-    if (!phoneNumbers) {
-      alert("Silakan masukkan nomor telepon!");
+    if (selectedContacts.length === 0) {
+      alert("Silakan pilih setidaknya satu nomor telepon!");
       return;
     }
 
-    // Split the input by commas and trim any extra spaces
-    const numbersArray = phoneNumbers.split(",").map((number) => number.trim());
+    const numbersArray = selectedContacts.map((contact) => contact.phone);
 
     axios
       .post("http://localhost:8080", {
@@ -37,20 +49,63 @@ export default function App() {
       });
   };
 
+  const toggleContactSelection = (contact) => {
+    setSelectedContacts((prevSelected) =>
+      prevSelected.includes(contact)
+        ? prevSelected.filter((c) => c !== contact)
+        : [...prevSelected, contact]
+    );
+  };
+
   return (
     <div className="App">
       <Template
         onSelectTemplate={setSelectedTemplate}
         selectedTemplate={selectedTemplate}
       />
-      <div className="mt-4 px-24">
-        <input
-          type="text"
-          placeholder="Masukkan nomor telepon (pisahkan dengan koma)"
-          value={phoneNumbers}
-          onChange={(e) => setPhoneNumbers(e.target.value)}
-          className="border p-2 rounded-md w-80 text-xs"
-        />
+      <div className="mt-4 px-6 sm:px-24 ">
+        <div className="mb-4 sm:flex grid grid-cols-1 gap-4 w-full">
+          <input
+            type="text"
+            placeholder="Masukkan nama"
+            value={newContact.name}
+            onChange={(e) =>
+              setNewContact({ ...newContact, name: e.target.value })
+            }
+            className="border p-2 rounded-md sm:w-80 w-full text-xs mr-2"
+          />
+          <input
+            type="text"
+            placeholder="Masukkan nomor telepon"
+            value={newContact.phone}
+            onChange={(e) =>
+              setNewContact({ ...newContact, phone: e.target.value })
+            }
+            className="border p-2 rounded-md sm:w-80 w-full text-xs mr-2"
+          />
+          <button
+            className="bg-green-500 px-5 py-2 rounded-md text-white font-normal hover:bg-green-700 transform transition duration-300 ease-in-out text-xs"
+            onClick={addContact}
+          >
+            Tambah Kontak
+          </button>
+        </div>
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold">Daftar Kontak</h3>
+          {contacts.map((contact, index) => (
+            <div key={index} className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                checked={selectedContacts.includes(contact)}
+                onChange={() => toggleContactSelection(contact)}
+                className="mr-2"
+              />
+              <span className="text-sm">
+                {contact.name} - {contact.phone}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
       <button
         className="bg-blue-500 px-5 py-2 mx-24 rounded-md text-white font-normal hover:bg-blue-700 transform transition duration-500 ease-in-out mt-4 text-xs"
@@ -127,18 +182,27 @@ const Template = ({ onSelectTemplate, selectedTemplate }) => {
             </div>
             <div className="space-y-2">
               <div className="flex text-xs">
-                <strong>ID:</strong> {template.id}
+                <strong className="pr-1">Status: </strong>{" "}
+                <span
+                  className={
+                    template.status === "APPROVED"
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }
+                >
+                  {template.status === "APPROVED" ? "Approved" : "Pending"}
+                </span>
               </div>
               <div className="flex text-xs">
-                <strong>Kategori:</strong>{" "}
+                <strong className="pr-1">Kategori:</strong>{" "}
                 {template.category || "Tidak Diketahui"}
               </div>
               <div className="flex text-xs">
-                <strong>Bahasa:</strong>{" "}
+                <strong className="pr-1">Bahasa:</strong>{" "}
                 {template.language || "Tidak Diketahui"}
               </div>
               <div className="text-sm text-gray-600 truncate">
-                <strong>Konten:</strong>{" "}
+                <strong className="pr-1">Konten:</strong>{" "}
                 {template.components?.[0]?.text || "Tidak Ada Konten"}
               </div>
             </div>
